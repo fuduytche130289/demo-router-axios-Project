@@ -86,6 +86,9 @@ export default {
   components: {},
   mounted() {
     this.getData();
+    if(localStorage.getItem('carts')){
+      this.carts = JSON.parse(localStorage.getItem('carts'))
+    }
   }
 }
 </script>

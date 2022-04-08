@@ -19,6 +19,11 @@ export const router = new VueRouter({
             component:()=>import('@/page/CardDetail')
         },
         {
+            path:'/dang-nhap',
+            name:'login',
+            component:()=>import('@/page/LoginPage')
+        },
+        {
             path:'*',
             component:()=>import('@/page/NotFound.vue')
         }
