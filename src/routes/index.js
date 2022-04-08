@@ -14,6 +14,11 @@ export const router = new VueRouter({
             component:()=>import('@/page/ProductDetail')
         },
         {
+            path:'/gio-hang',
+            name:'card-detail',
+            component:()=>import('@/page/CardDetail')
+        },
+        {
             path:'*',
             component:()=>import('@/page/NotFound.vue')
         }

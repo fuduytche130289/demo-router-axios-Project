@@ -10,7 +10,9 @@
              v-for="(cartsItem,cartsIndex) in homeData" :key="cartsIndex">
 
           <div>
-            <img :src="cartsItem.image.full_image_path" class="z-10 w-full h-72 object-cover" alt="shoe">
+            <router-link @click.native="scrollToTop" :to="{name:'detail-product',query:{id:cartsItem.id}} ">
+              <img :src="cartsItem.image.full_image_path" class="z-10 w-full h-72 object-cover" alt="shoe">
+            </router-link>
             <div class="space-y-4 mt-5 px-4">
               <div class="flex justify-between">
                 <h4 class="uppercase font-extrabold text-xl text-left">{{ cartsItem.name }}</h4>
@@ -25,11 +27,9 @@
                 <span class="bi bi-dash cursor-pointer"><i class="fa-solid fa-minus"></i></span>
               </div>
               <div class="gap-1 flex">
-                <router-link @click.native="scrollToTop" :to="{name:'detail-product',query:{id:cartsItem.id}} ">
-                  <button class="p-3 text-md bg-gray-900 text-white">
+                  <button class="p-3 text-md bg-gray-900 text-white" @click="addToCart(cartsItem.id)">
                     Add To Cart
                   </button>
-                </router-link>
                 <button class="p-3 text-md bg-gray-900 text-white"><i class="fa-solid fa-share-nodes"></i></button>
               </div>
             </div>
@@ -49,7 +49,8 @@ export default {
   name: "HomePage",
   data() {
     return {
-      homeData: {}
+      homeData: {},
+      carts: []
     }
   },
   methods: {
@@ -63,8 +64,23 @@ export default {
         console.log(e);
       }
     },
+    addToCart(ProductId) {
+
+      if (this.carts.find(product => product.id == ProductId)) {
+        alert('sản phẩm đã có trong giỏ hàng')
+
+      } else {
+
+        this.carts.push(this.homeData.find(product => product.id == ProductId))
+        this.carts.map((item) => item.quantity = 1)
+        localStorage.setItem('carts', JSON.stringify(this.carts))
+        alert('thêm sản phẩm vào giỏ hàng thành công')
+
+      }
+
+    },
     scrollToTop() {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
   },
   components: {},
