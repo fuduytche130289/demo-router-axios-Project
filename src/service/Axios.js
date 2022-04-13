@@ -23,7 +23,7 @@ function getInstance(){
     axiosInstance.interceptors.request.use(config=>{//đoạn này để check token, cơ chế bảo mật api và đồng bộ hóa với back end
         const token = localStorage.getItem('token');
         if(token){
-            config.headers.Authorization = `Bearer${token}`;
+            config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     });

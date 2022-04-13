@@ -2,15 +2,15 @@
   <!-- component -->
   <div class="font-sans">
     <div class="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 ">
-      <div class="relative sm:max-w-sm w-full">
-        <div class="card bg-blue-400 shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>
-        <div class="card bg-red-400 shadow-lg  w-full h-full rounded-3xl absolute  transform rotate-6"></div>
-        <div class="relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md">
-          <label class="block mt-3 text-sm text-gray-700 text-center font-semibold">
-            Sign Up
-          </label>
-          <form @submit.prevent="signup" method="" action="" class="mt-10">
 
+            <div class="relative sm:max-w-sm w-full">
+              <div class="card bg-blue-400 shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>
+              <div class="card bg-red-400 shadow-lg  w-full h-full rounded-3xl absolute  transform rotate-6"></div>
+              <div class="relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md">
+                <label class="block mt-3 text-sm text-gray-700 text-center font-semibold">
+                  Sign Up
+                </label>
+                <form @submit.prevent="signup" method="" action="" class="mt-10">
             <div>
               <input type="text" placeholder="Name" v-model="user.name"
                      class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
