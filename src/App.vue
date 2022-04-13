@@ -10,7 +10,11 @@
       <div class="md:order-2 order-1 pr-6 flex space-x-2 uppercase font-semibold items-center">
         <div class=".pr-4"><a href="">Home</a></div>
         <div class=".pr-4"><a href="">Danh mục</a></div>
-        <div class=".pr-4"><a href="">Đăng ký</a></div>
+        <div class=".pr-4">
+          <router-link :to="{name:'signup'}">
+            <a href="">Đăng ký</a>
+          </router-link>
+        </div>
         <div class=".pr-4">
           <router-link :to="{name:'login'}">
             <a href="">Đăng nhập</a>

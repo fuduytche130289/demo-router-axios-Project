@@ -8,16 +8,18 @@
           <label class="block mt-3 text-sm text-gray-700 text-center font-semibold">
             Login
           </label>
-          <form method="#" action="#" class="mt-10" @submit.prevent="_login()">
+          <form method="" action="" class="mt-10" @submit.prevent="_login()">
 
             <div>
-              <input type="text" v-model="email" placeholder="Email"
+              <input type="text" v-model="user.email" placeholder="Email"
                      class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
+              <p class="error font-semibold text-red-600">{{ err.email }} </p>
             </div>
 
             <div class="mt-7">
-              <input type="password" v-model="password" placeholder="Password"
+              <input type="password" v-model="user.password" placeholder="Password"
                      class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
+              <p class="error font-semibold text-red-600">{{ err.password }}</p>
             </div>
 
 
@@ -33,10 +35,12 @@
             <div class="mt-7">
               <div class="flex justify-center items-center">
                 <label class="mr-2">Do you have an account?</label>
-                <a href="#"
-                   class=" text-blue-500 transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                  Sign up
-                </a>
+                <router-link :to="{name:'signup'}">
+                  <a href="#"
+                     class=" text-blue-500 transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                    Sign up
+                  </a>
+                </router-link>
               </div>
             </div>
           </form>
@@ -52,30 +56,63 @@
 import {authService} from "@/service/authService";
 
 export default {
-  name: "LoginPage",
   data() {
     return {
-      email: "",
-      password: "",
+      user: {
+        email: '',
+        password: '',
+      },
+      err: {
+        email: '',
+        password: '',
+      },
+      countErr: 0,
     }
   },
   methods: {
-    async _login() {
+    Validate() {
+      if (!this.user.email) {
+        this.err.email = "Email is required.";
+        this.countErr++;
+      } else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
+        this.countErr++;
+        this.err.email = "Email is invalid.";
+      } else {
+        this.err.email = "";
+      }
+      if (!this.user.password) {
+        this.err.password = "Password is required.";
+        this.countErr++;
+      } else {
+        this.err.password = "";
+      }
+      if (this.countErr > 0) {
+        this.countErr = 0;
+        return false;
+      }
+      this.countErr = 0;
+      return true;
+    },
+    async _login(e) {
+      const isValid = this.Validate();
+      if (!isValid) {
+        return;
+      }
       try {
-        const resp = await authService.doLogin({
-          email: this.email,
-          password: this.password
+        const response = await authService.doLogin({
+          email: this.user.email,
+          password: this.user.password,
         })
-        const data = resp.data;
-        localStorage.setItem("token", data.token);
-        alert('Đăng nhập thành công');
-        window.location.href = '/';
+        const data = response.data;
+        localStorage.setItem('token', data.token);
+        alert('Login Successfully');
+        this.$router.push({name: 'list-product'});
       } catch (e) {
-        console.log(e)
-        alert('Email chưa được đăng ký hoặc mật khẩu không đúng')
+        console.log(e);
+        alert('Login Failed');
       }
     },
-  }
+  },
 }
 </script>
 
