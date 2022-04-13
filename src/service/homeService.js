@@ -5,5 +5,5 @@ function getArticles(payload) {
 }
 
 export const homeService = {
-    getArticles
+    getArticles,
 };

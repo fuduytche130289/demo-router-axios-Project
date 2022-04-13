@@ -14,11 +14,18 @@
                 </select>
               </div>
             </div>
+            <!--Search-->
+            <div class="mt-6">
+              <form action="" @submit.prevent="onSubmit()">
+                <input type="text" id="Search" name="Search" placeholder="Search" v-model="search"
+                       class="w-full h-10 pl-3 border-b-2 border-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"/>
+              </form>
+            </div>
 
             <!--Articles-->
             <div class="mt-6">
               <div class="flex max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md"
-                   v-for="(listArticlesItem,listArticlesIndex) in listArticles" :key="listArticlesIndex">
+                   v-for="(listArticlesItem,listArticlesIndex) in listArticles.articles" :key="listArticlesIndex">
                 <div>
                   <img class="flex-1 w-72 h-72 object-cover" :src="listArticlesItem.urlToImage" alt="">
                 </div>
@@ -30,21 +37,31 @@
                   </div>
                   <div class="mt-2">
 
-                      <a :href="listArticlesItem.url" class="text-2xl font-bold text-gray-700 hover:underline">{{
-                          listArticlesItem.title
-                        }}</a>
+                    <a :href="listArticlesItem.url" class="text-2xl font-bold text-gray-700 hover:underline">{{
+                        listArticlesItem.title
+                      }}</a>
 
                     <p class="mt-2 text-gray-600">{{ listArticlesItem.description }}</p>
                   </div>
-                  <div class="flex items-center justify-between mt-4"><a href="#"
-                                                                         class="text-blue-500 hover:underline">Read
-                    more</a>
-                    <div><a href="#" class="flex items-center"><img
-                        src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=731&amp;q=80"
-                        alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
-                      <h1 class="font-bold text-gray-700 hover:underline">{{ listArticlesItem.source.name }}</h1>
+                  <div class="flex items-center justify-between mt-4">
+                    <div class="flex flex-col">
+                      <a class="text-blue-500 hover:underline" :href="facebookURL + listArticlesItem.url">Share to
+                        facebook</a>
+                      <a class="text-blue-500 hover:underline" :href="twitterURL + listArticlesItem.url">Share to
+                        twitter</a>
+
+                        <button class="p-2 text-md bg-gray-900 text-white" @click="addToFavorite(listArticlesItem.url)">
+                          Add To Favorite
+                        </button>
+
+                    </div>
+                    <div><a href="#" class="flex items-center">
+                      <h1 class="font-bold text-gray-700 hover:underline">Author: {{
+                          listArticlesItem.source.name
+                        }}</h1>
                     </a></div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -176,23 +193,50 @@ export default {
   data() {
     return {
       listArticles: [],
-      search: 'tesla'
+      favorite: [],
+      search: 'tesla',
+      facebookURL: 'https://www.facebook.com/sharer/sharer.php?u=',
+      twitterURL: 'https://twitter.com/intent/tweet?text=',
     }
   },
   methods: {
     async getData() {
       try {
         const response = await homeService.getArticles(this.search);
-        this.listArticles = response.data.articles;
+        this.listArticles = response.data;
         console.log(this.listArticles)
 
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async onSubmit() {
+      try {
+        const res = await homeService.getArticles(this.search);
+        this.listArticles = res.data;
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    addToFavorite(articleUrl) {
+      if (this.favorite.find(article => article.url == articleUrl)) {
+        alert('da them vao favorite')
+
+      } else {
+        this.favorite.push(this.listArticles.articles.find(article => article.url == articleUrl))
+        this.favorite.map((item) => item.quantity = 1)
+        localStorage.setItem('carts', JSON.stringify(this.favorite))
+        alert('thêm vào yeu thich thành công')
+      }
+
+    },
   },
   mounted() {
     this.getData();
+    this.onSubmit();
+    if (localStorage.getItem('favorite')) {
+      this.carts = JSON.parse(localStorage.getItem('favorite'))
+    }
   },
 }
 </script>

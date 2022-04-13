@@ -9,9 +9,9 @@ export const router = new VueRouter({
             component:()=>import('@/page/HomePage')
         },
         {
-            path:'/chi-tiet-bai-viet',
-            name:'article-detail',
-            component:()=>import('@/page/ArticleDetail')
+            path:'/bai-viet-yeu-thich',
+            name:'favorite-article',
+            component:()=>import('@/page/FavoriteArticle')
         },
         {
             path:'*',
